@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Flashcards de Termos Médicos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f1f1f1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .card {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      width: 350px;
+      height: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+      margin: 20px;
+      font-size: 1.2em;
+      transition: transform 0.3s;
+    }
+    .card:hover {
+      transform: scale(1.05);
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 1em;
+      background-color: #ff0040;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .termo {
+      font-weight: bold;
+      font-size: 1.4em;
+      margin-bottom: 10px;
+    }
+    .definicao {
+      font-size: 1em;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <h1>Flashcards de Termos Médicos</h1>
+  <div class="card" id="flashcard">
+    <div class="termo">Clique para iniciar</div>
+    <div class="definicao"></div>
+  </div>
+  <button onclick="mostrarProximoTermo()">Próximo</button>
+  <!-- botão extra para ir ao prontuário -->
+<a href="admissão.html" target="_blank">
+    <button>Admissão</button>
+  </a>
+  
+
+  <script>
+    const flashcards = [
+      { termo: "Abscesso", definicao: "Acúmulo de pus causado por uma infecção." },
+      { termo: "Adípcia", definicao: "Ausência de sede." },
+      { termo: "Afagia", definicao: "Incapacidade de engolir." },
+      { termo: "Afebril", definicao: "Sem febre." },
+      { termo: "Apneia", definicao: "Parada temporária da respiração." },
+      { termo: "Afonia", definicao: "Perda total da voz." },
+      { termo: "Alopecia", definicao: "Perda de cabelo." },
+      { termo: "Anasarca", definicao: "Inchaço generalizado pelo corpo." },
+      { termo: "Anemia", definicao: "Redução de glóbulos vermelhos ou hemoglobina." },
+      { termo: "Apirexia", definicao: "Ausência de febre." },
+      { termo: "Bacteremia", definicao: "Presença de bactérias no sangue." },
+      { termo: "Biópsia", definicao: "Remoção de tecido para exame diagnóstico." },
+      { termo: "Bradicardia", definicao: "Batimento cardíaco mais lento que o normal." },
+      { termo: "Bradipneia", definicao: "Respiração anormalmente lenta." },
+      { termo: "Cãibra", definicao: "Contração muscular involuntária e dolorosa." },
+      { termo: "Calafrio", definicao: "Sensação de frio com tremores." },
+      { termo: "Cefaleia", definicao: "Dor de cabeça." },
+      { termo: "Cianose", definicao: "Coloração azulada da pele por falta de oxigênio." },
+      { termo: "Cisalhamento", definicao: "Força que separa camadas de tecidos, causando lesões." },
+      { termo: "Glister", definicao: "Produto para limpeza oral (ex. enxaguante bucal)." },
+      { termo: "Cloasma", definicao: "Manchas escuras na pele, geralmente na face." },
+      { termo: "Coriza", definicao: "Corrimento nasal aquoso." },
+      { termo: "Deambular", definicao: "Andar, locomover-se." },
+      { termo: "Decúbito", definicao: "Posição do corpo deitado." },
+      { termo: "Pediculose", definicao: "Infestação por piolhos." },
+      { termo: "Erupção", definicao: "Lesões ou manchas na pele." },
+      { termo: "Hematoma", definicao: "Acúmulo de sangue sob a pele por trauma." },
+      { termo: "Protuberância", definicao: "Saliência, inchaço ou elevação." },
+      { termo: "Déficit", definicao: "Falta ou falha funcional." },
+      { termo: "Otalgia", definicao: "Dor de ouvido." },
+      { termo: "Demaciada", definicao: "Com edema, inchada." },
+      { termo: "Hiperemiada", definicao: "Com excesso de sangue, avermelhada." },
+      { termo: "Normocrômica", definicao: "Com coloração normal." },
+      { termo: "Hipocrômica", definicao: "Com pouca coloração, pálida." },
+      { termo: "Hipercrômica", definicao: "Com coloração intensa." },
+      { termo: "Icterícia", definicao: "Pele e olhos amarelados por bilirrubina alta." },
+      { termo: "Isocórmica", definicao: "Com coloração uniforme." },
+      { termo: "Ansiocórmica", definicao: "Com coloração desigual." },
+      { termo: "Midríase", definicao: "Dilatação da pupila." },
+      { termo: "Miose", definicao: "Contração da pupila." },
+      { termo: "Epistaxe", definicao: "Sangramento nasal." },
+      { termo: "Rinite", definicao: "Inflamação da mucosa nasal." },
+      { termo: "Traumatismo", definicao: "Lesão causada por impacto físico." },
+      { termo: "Infecção purulenta", definicao: "Infecção com presença de pus." },
+      { termo: "Halitose", definicao: "Mau hálito." },
+      { termo: "Fissura sangrante", definicao: "Rachadura na pele com sangramento." },
+      { termo: "Náusea", definicao: "Sensação de enjoo." },
+      { termo: "Necrose", definicao: "Morte de tecido corporal." },
+      { termo: "Nistagmo", definicao: "Movimento involuntário dos olhos." },
+      { termo: "Unicofagia", definicao: "Hábito de roer unhas." },
+      { termo: "Otite", definicao: "Inflamação do ouvido." },
+      { termo: "Oxidação", definicao: "Reação química com oxigênio." },
+      { termo: "Poliúria", definicao: "Aumento do volume urinário." },
+      { termo: "Prurido", definicao: "Coceira." },
+      { termo: "Paracentese", definicao: "Puncionar cavidade para retirada de líquido." },
+      { termo: "Secura", definicao: "Ausência de umidade." },
+      { termo: "Sutura", definicao: "Costura de tecidos após lesão ou cirurgia." },
+      { termo: "Taquicardia", definicao: "Batimento cardíaco acelerado." },
+      { termo: "Taquipneia", definicao: "Respiração acelerada." },
+      { termo: "Torpor", definicao: "Redução da atividade física e mental." },
+      { termo: "Traqueostomia", definicao: "Abertura cirúrgica na traqueia para respiração." },
+      { termo: "Trombose", definicao: "Formação de coágulo em vaso sanguíneo." },
+      { termo: "Úlcera", definicao: "Ferida aberta que não cicatriza facilmente." },
+      { termo: "Urticária", definicao: "Erupção alérgica com coceira." },
+      { termo: "Vertigem", definicao: "Sensação de tontura ou desequilíbrio." },
+      { termo: "Desaceleração", definicao: "Diminuição da velocidade." },
+      { termo: "Histopatologia", definicao: "Estudo das alterações dos tecidos doentes." },
+      { termo: "Acelerometria", definicao: "Medição de aceleração, como em exames fetais." },
+      { termo: "Sangue", definicao: "Fluido vital composto por células e plasma." },
+      { termo: "Pulso filiforme", definicao: "Pulso fino e fraco." },
+      { termo: "Paresia", definicao: "Paralisia parcial." },
+      { termo: "Epiderme", definicao: "Camada mais externa da pele." },
+      { termo: "Mucosa", definicao: "Tecido que reveste cavidades internas do corpo." },
+      { termo: "Intestino", definicao: "Órgão do sistema digestivo." },
+      { termo: "Corrimento nasal", definicao: "Secreção excessiva do nariz." },
+      { termo: "Deambulação", definicao: "Ato de andar." },
+      { termo: "Dermatite", definicao: "Inflamação da pele." },
+      { termo: "Dermatose", definicao: "Doença de pele em geral." },
+      { termo: "Desidratação", definicao: "Perda excessiva de água do corpo." },
+      { termo: "Plegia", definicao: "Paralisia total de um membro ou região." },
+      { termo: "Hemiplegia", definicao: "Paralisia de um lado do corpo." },
+      { termo: "Paraplegia", definicao: "Paralisia dos membros inferiores." },
+      { termo: "Quadriplegia", definicao: "Paralisia dos quatro membros." },
+      { termo: "Dispneia", definicao: "Dificuldade para respirar." },
+      { termo: "Disúria", definicao: "Dor ou ardor ao urinar." },
+      { termo: "Diurese", definicao: "Formação e eliminação de urina." },
+      { termo: "Enteral", definicao: "Relacionado ao intestino ou via digestiva." },
+      { termo: "Equimose", definicao: "Mancha roxa na pele por extravasamento de sangue." },
+      { termo: "Eritema", definicao: "Vermelhidão na pele por inflamação." },
+      { termo: "Fadiga", definicao: "Cansaço extremo." },
+      { termo: "Flatulência", definicao: "Gases intestinais." },
+      { termo: "Flebite", definicao: "Inflamação de veia." },
+      { termo: "Vesícula", definicao: "Pequena bolsa com líquido (como a biliar)." },
+      { termo: "Hematúria", definicao: "Presença de sangue na urina." },
+      { termo: "Hemorragia", definicao: "Perda de sangue por ruptura de vasos." },
+      { termo: "Hepatite", definicao: "Inflamação do fígado." },
+      { termo: "Hiperemia", definicao: "Aumento de sangue em um local do corpo." },
+      { termo: "Hiperglicemia", definicao: "Excesso de glicose no sangue." },
+      { termo: "Incisão", definicao: "Corte cirúrgico." },
+      { termo: "Intravenoso", definicao: "Administrado diretamente na veia." },
+      { termo: "Isocoria", definicao: "Pupilas de tamanho igual." },
+      { termo: "Isquemia", definicao: "Redução do fluxo sanguíneo para um tecido." },
+      { termo: "Melena", definicao: "Fezes negras devido à presença de sangue digerido." }
+    ];
+
+    let index = 0;
+
+    function mostrarProximoTermo() {
+      const card = document.getElementById('flashcard');
+      const termoEl = card.querySelector('.termo');
+      const definicaoEl = card.querySelector('.definicao');
+      const item = flashcards[index];
+      termoEl.textContent = item.termo;
+      definicaoEl.textContent = item.definicao;
+      index = (index + 1) % flashcards.length;
+    }
+  </script>
+</body>
+</html>
